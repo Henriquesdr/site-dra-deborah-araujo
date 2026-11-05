@@ -27,7 +27,7 @@ assets/
 | WhatsApp (5531983125089) | `assets/js/main.js`, `CONFIG.whatsapp`, e `index.html`, seção Contato |
 | CRM-MG 107998 | `index.html`: seção Sobre e rodapé |
 | E-mail que recebe as respostas do formulário | `assets/js/main.js`, `CONFIG.respostas` |
-| Domínio | criar o arquivo `CNAME` e trocar `og:image` por endereço completo |
+| Domínio (dradeboraharaujo.com.br) | arquivo `CNAME`, e endereços completos no início do `index.html` |
 
 O formulário faz duas coisas ao ser enviado:
 1. Manda uma cópia das respostas (nome, telefone, interesse e mensagem) para o e-mail de `CONFIG.respostas`, pelo serviço gratuito FormSubmit. **No primeiro envio com o site no ar, chega um e-mail de ativação nesse endereço: clique em "Activate Form" uma vez.** Depois disso, cada envio chega como e-mail.
