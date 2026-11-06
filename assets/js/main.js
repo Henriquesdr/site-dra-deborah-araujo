@@ -150,14 +150,25 @@ const CONFIG = {
       `\n\nGostaria de agendar uma consulta.`;
 
     // cópia das respostas por e-mail (não trava o WhatsApp se falhar)
+    // Envio como formulário simples (sem JSON): o navegador não faz pré-verificação
+    // e o pedido continua mesmo quando o WhatsApp abre por cima da página.
     if (CONFIG.respostas) {
+      const corpo = new URLSearchParams({
+        Nome: dados.nome,
+        Telefone: dados.telefone || '(não informado)',
+        Interesse: dados.interesse,
+        Mensagem: dados.mensagem || '(sem mensagem)',
+        _subject: `Novo contato pelo site: ${dados.nome} (${dados.interesse})`,
+        _template: 'table',
+        _captcha: 'false'
+      });
+      const url = `https://formsubmit.co/ajax/${CONFIG.respostas}`;
       try {
-        fetch(`https://formsubmit.co/ajax/${CONFIG.respostas}`, {
-          method: 'POST', keepalive: true,
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ ...dados, _subject: `Novo contato pelo site: ${dados.nome} (${dados.interesse})`, _template: 'table', _captcha: 'false' })
-        }).catch(() => {});
-      } catch (_) {}
+        fetch(url, { method: 'POST', body: corpo, keepalive: true, headers: { Accept: 'application/json' } })
+          .catch(() => { try { navigator.sendBeacon && navigator.sendBeacon(url, corpo); } catch (_) {} });
+      } catch (_) {
+        try { navigator.sendBeacon && navigator.sendBeacon(url, corpo); } catch (_) {}
+      }
     }
 
     // abre a conversa no WhatsApp com tudo preenchido
